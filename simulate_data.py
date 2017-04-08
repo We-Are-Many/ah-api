@@ -35,6 +35,24 @@ def simulate_data():
 # 	conn.close()
 # 	cur.close()
 
-
-simulate_data()
+def simulate_problems():
+	problem_list = ['I cannot control myself once I start drinking.', 
+					'I cannot complete a day without 2 bottles of vodka.',
+					'I get wasted every other day.',
+					'I feel like alcohol is taken over my life.',
+					'I cannot imagine my life without scotch.',
+					'I spend all my money on booze.',
+					'My wife will leave me if I don\'t give up drinking.'
+					'I really drink a lot.'
+					'I try to quit drinking but my friends won\'t let me.'
+					'I am alone because of my drinking habits.'
+					'I lost my friends due to my alcohol addiction.'
+					'My health has gone down because I drink too much.'
+					'I might have liver problems because of my drinking habit.'
+					'I just want to open up to someone about my booze addiction.'
+					'I don\'t understand why people have a problem with my drinking.'
+					'I drink more whiskey than I do water.'
+					]
+	return problem_list
+#simulate_data()
 #modify_locations()

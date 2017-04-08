@@ -53,23 +53,29 @@ def create_user():
 
 @app.route('/postmessage', methods=['POST'])
 def save_message():
-	conn = mysql.connect()
-	try:
-		cursor = conn.cursor()
+	to_user = request.form.get('to', '')
+    from_user = request.form.get('from', '')
+    msg = request.form.get('msg', '')
+    conn = mysql.connect()
+    try:
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO messages VALUES (%s, %s, %s)", (to_user, from_user, msg))
+        conn.commit()
 		conn.close()
 	except:
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
+
 @app.route('/fetchmessage', methods=['GET'])
 def get_message():
-	conn = mysql.connect()
-	try:
-		cursor = conn.cursor()
-		conn.close()
-	except:
-		conn.close()
-		return dataFormatter(500, "Database Disconnect", [])
+    conn = mysql.connect()
+    try:
+        conn.close()
+        return dataFormatter(200, "Success", [])
+    except:
+    	conn.close()
+    	return dataFormatter(500, "Database Disconnect", [])
 
 @app.route('/saveuserrating', methods=['POST'])
 def save_rating():

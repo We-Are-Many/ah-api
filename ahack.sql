@@ -18,6 +18,8 @@
 --
 -- Table structure for table `online_users`
 --
+create database ahack;
+use ahack;
 
 DROP TABLE IF EXISTS `online_users`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

@@ -83,6 +83,17 @@ def save_rating():
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
+noIntent = [
+    "I'm having trouble understanding you, could you rephrase your question?",
+    "I didn't catch that, could you rephrase your query?",
+    "Sorry, I didn't understand that. Try rephrasing your request."
+]
+
+@app.route("/no_intent", methods=['POST'])
+def no_intent():
+    message = random.choice(noIntent)
+    return message
+
 def process_query(query):
     msg = ""
     try:

@@ -15,9 +15,30 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-drop database ahack;
-create database ahack;
-use ahack;
+--
+-- Table structure for table `acc_intents`
+--
+
+DROP TABLE IF EXISTS `acc_intents`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `acc_intents` (
+  `user_name` varchar(45) NOT NULL,
+  `alcohol` float DEFAULT NULL,
+  `positive` float DEFAULT NULL,
+  `negative` float DEFAULT NULL,
+  `extra` float DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `acc_intents`
+--
+
+LOCK TABLES `acc_intents` WRITE;
+/*!40000 ALTER TABLE `acc_intents` DISABLE KEYS */;
+/*!40000 ALTER TABLE `acc_intents` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Table structure for table `bio_keywords`
@@ -176,4 +197,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-09  4:03:47
+-- Dump completed on 2017-04-09  4:19:32

@@ -37,9 +37,11 @@ def create_user():
 		cursor = conn.cursor()
 		cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
 		conn.commit()
+		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])
 	except:
+		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 	conn = mysql.connect()
@@ -47,9 +49,11 @@ def create_user():
 		cursor = conn.cursor()
 		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
 		conn.commit()
+		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])
 	except:
+		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
@@ -58,8 +62,11 @@ def save_message():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		cursor.close()
 		conn.close()
 	except:
+
+		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
@@ -68,8 +75,10 @@ def get_message():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		cursor.close()
 		conn.close()
 	except:
+		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
@@ -78,8 +87,10 @@ def save_rating():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		cursor.close()
 		conn.close()
 	except:
+		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
@@ -93,6 +104,25 @@ noIntent = [
 def no_intent():
     message = random.choice(noIntent)
     return message
+
+@app.route("/online_user", methods=['POST'])
+def online_user():
+	conn = mysql.connect()
+	try:
+		cursor = conn.cursor()
+		cursor.execute("SELECT user_name from online_users where is_online=1")
+		data = cursor.fetchall()
+		online_users = []
+		for row in data:
+			user = row[0]
+			online_users.append(user)
+		conn.commit()
+		cursor.close()
+		conn.close()
+	except:
+		cursor.close()
+		conn.close()
+		return dataFormatter(500, "Database Disconnect", [])
 
 def process_query(query):
     msg = ""

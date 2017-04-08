@@ -115,13 +115,13 @@ def process_query(query):
 
     if intent is None or confidence < 0.2:
         msg = no_intent()
-    else if intent == "alcohol":
+    elif intent == "alcohol":
     	msg = "alcohol"
-    else if intent == "negative":
+    elif intent == "negative":
     	msg = "negative"
-    else if intent == "positive":
+    elif intent == "positive":
     	msg = "positive"
-    else if intent == "extra":
+    elif intent == "extra":
     	msg = "extra"
     else:
     	msg = "empty"

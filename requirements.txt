@@ -1,0 +1,10 @@
+click==6.7
+Flask==0.12.1
+itsdangerous==0.24
+Jinja2==2.9.6
+junction-client==0.0.1a1
+MarkupSafe==0.23
+mysql==0.0.1
+MySQL-python==1.2.5
+schematics==2.0.0a1
+Werkzeug==0.12.1

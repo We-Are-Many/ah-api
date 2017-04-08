@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 from app import app
 from flask import jsonify, request, Flask, json
 from flaskext.mysql import MySQL
@@ -80,3 +82,36 @@ def save_rating():
 	except:
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
+
+def process_query(query):
+    msg = ""
+    try:
+        response = requests.get(url='https://api.wit.ai/message?v=20170409&q='+query,headers={'Authorization': 'Bearer VT4JUXRFXXQTIQ53V3IE3IZPLSY34Z5H'})
+    except:
+        msg = "Looks like we are facing technical difficulties. Please try again later."
+        return msg
+    dict_response = json.loads(response.text)
+
+    intent = None
+    confidence = None
+    entities = None
+    msg = None
+
+    if dict_response['entities']['intent']:
+        intent = dict_response['entities']['intent'][0]['value']
+        confidence = dict_response['entities']['intent'][0]['confidence']
+        entities = dict_response['entities']
+
+    if intent is None or confidence < 0.2:
+        msg = no_intent()
+    else if intent == "alcohol":
+    	msg = "alcohol"
+    else if intent == "negative":
+    	msg = "negative"
+    else if intent == "positive":
+    	msg = "positive"
+    else if intent == "extra":
+    	msg = "extra"
+    else:
+    	msg = "empty"
+    return msg

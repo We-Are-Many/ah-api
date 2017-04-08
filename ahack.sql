@@ -16,6 +16,35 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
+-- Table structure for table `bio_keywords`
+--
+
+DROP TABLE IF EXISTS `bio_keywords`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!40101 SET character_set_client = utf8 */;
+CREATE TABLE `bio_keywords` (
+  `user_name` varchar(45) NOT NULL,
+  `drink` int(3) DEFAULT NULL,
+  `alcohol` int(3) DEFAULT NULL,
+  `bottle` int(3) DEFAULT NULL,
+  `money` int(3) DEFAULT NULL,
+  `quit` int(3) DEFAULT NULL,
+  `addict` int(3) DEFAULT NULL,
+  `problem` int(3) DEFAULT NULL,
+  `health` int(3) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `bio_keywords`
+--
+
+LOCK TABLES `bio_keywords` WRITE;
+/*!40000 ALTER TABLE `bio_keywords` DISABLE KEYS */;
+/*!40000 ALTER TABLE `bio_keywords` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `messages`
 --
 
@@ -147,4 +176,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-09  3:06:25
+-- Dump completed on 2017-04-09  4:03:47

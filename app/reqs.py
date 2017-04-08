@@ -27,6 +27,7 @@ def create_user():
 	email = request.form.get('email', '')
 	location = request.form.get('location', '')
 	talk_points = request.form.get('talk_points', '')
+	problem = request.form.get('problem', '')
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
@@ -35,7 +36,17 @@ def create_user():
 		conn.close()
 		return dataFormatter(200, "Success", [])
 	except:
-		message = "Could not connect to database"
+		conn.close()
+		return dataFormatter(500, "Database Disconnect", [])
+	conn = mysql.connect()
+	try:
+		cursor = conn.cursor()
+		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
+		conn.commit()
+		conn.close()
+		return dataFormatter(200, "Success", [])
+	except:
+		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
 @app.route('/postmessage', methods=['POST'])
@@ -43,7 +54,9 @@ def save_message():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		conn.close()
 	except:
+		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
 @app.route('/fetchmessage', methods=['GET'])
@@ -51,7 +64,9 @@ def get_message():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		conn.close()
 	except:
+		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
 @app.route('/saveuserrating', methods=['POST'])
@@ -59,5 +74,7 @@ def save_rating():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		conn.close()
 	except:
+		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])

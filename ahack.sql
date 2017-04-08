@@ -15,6 +15,10 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
+drop database ahack;
+create database ahack;
+use ahack;
+
 --
 -- Table structure for table `bio_keywords`
 --
@@ -47,10 +51,6 @@ UNLOCK TABLES;
 --
 -- Table structure for table `messages`
 --
-
-drop database ahack;
-create database ahack;
-use ahack;
 
 DROP TABLE IF EXISTS `messages`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;

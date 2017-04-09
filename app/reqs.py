@@ -113,13 +113,19 @@ def no_intent():
     message = random.choice(noIntent)
     return message
 
-@app.route("/switch_status_on", methods=['POST'])
+@app.route("/switch_status", methods=['POST'])
 def switch_status_on():
     user_name = request.form.get('user_name', '')
     conn = mysql.connect()
     try:
         cursor = conn.cursor()
         cursor.execute("UPDATE online_users SET is_online=1 where user_name=%s", (user_name))
+        on_off = cursor.fetchall()
+        flag = on_off[0][0]
+        if flag == 0:
+            cursor.execute("UPDATE online_users SET is_online=1 where user_name=%s", (user_name))
+        else:
+            cursor.execute("UPDATE online_users SET is_online=0 where user_name=%s", (user_name))
         conn.commit()
         cursor.close()
         conn.close()
@@ -129,6 +135,7 @@ def switch_status_on():
         conn.close()
         return dataFormatter(500, "Database Disconnect", [])
 
+"""
 @app.route("/switch_status_off", methods=['POST'])
 def switch_status_off():
     user_name = request.form.get('user_name', '')
@@ -144,7 +151,7 @@ def switch_status_off():
         cursor.close()
         conn.close()
         return dataFormatter(500, "Database Disconnect", [])
-
+"""
 @app.route("/online_user", methods=['GET'])
 def online_user():
     conn = mysql.connect()
@@ -164,6 +171,8 @@ def online_user():
         cursor.close()
         conn.close()
         return dataFormatter(500, "Database Disconnect", [])
+
+@app.route('prefer', methods=['GET'])
 
 def process_query(query, user_name):
     try:

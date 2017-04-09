@@ -188,7 +188,7 @@ def process_query(query, user_name):
     if dict_response['entities']['intent'][0]['value'] is None or dict_response['entities']['intent'][0]['confidence'] < 0.2:
         response = {'alcohol' : 0.0, 'positive' : 0.0, 'negative' : 0.0, 'extra' : 0.0}
     conn = mysql.connect()
-	try:
+    try:
 		cursor = conn.cursor()
 		cursor.execute("SELECT alcohol, positive, negative, extra from acc_intents where user_name=%s", (user_name))
 		data = cursor.fetchall()

@@ -139,7 +139,7 @@ def online_user():
         conn.commit()
         cursor.close()
         conn.close()
-        return online_users
+        return dataFormatter(200, "Success", online_users)
     except:
         cursor.close()
         conn.close()

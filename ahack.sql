@@ -27,7 +27,8 @@ CREATE TABLE `acc_intents` (
   `alcohol` float DEFAULT NULL,
   `positive` float DEFAULT NULL,
   `negative` float DEFAULT NULL,
-  `extra` float DEFAULT NULL
+  `extra` float DEFAULT NULL,
+  `rating` float DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -197,4 +198,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2017-04-09  4:19:32
+-- Dump completed on 2017-04-09  5:43:51

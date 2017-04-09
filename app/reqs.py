@@ -36,17 +36,6 @@ def create_user():
 	try:
 		cursor = conn.cursor()
 		cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
-		conn.commit()
-		cursor.close()
-		conn.close()
-		return dataFormatter(200, "Success", [])
-	except:
-		cursor.close()
-		conn.close()
-		return dataFormatter(500, "Database Disconnect", [])
-	conn = mysql.connect()
-	try:
-		cursor = conn.cursor()
 		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
 		conn.commit()
 		cursor.close()
@@ -62,10 +51,15 @@ def save_message():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		from_user = request.form.get('from_user', '')
+		to_user = request.form.get('to_user', '')
+		message = request.form.get('message', '')
+		cursor.execute("INSERT INTO messages VALUES (%s, %s, %s)", (to_user, from_user, message))
+		conn.commit()
 		cursor.close()
 		conn.close()
+		return dataFormatter(200, "Success", [])
 	except:
-
 		cursor.close()
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
@@ -82,6 +76,7 @@ def get_message():
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
+# save average of rating
 @app.route('/saveuserrating', methods=['POST'])
 def save_rating():
 	conn = mysql.connect()
@@ -119,6 +114,7 @@ def online_user():
 		conn.commit()
 		cursor.close()
 		conn.close()
+		return online_users
 	except:
 		cursor.close()
 		conn.close()

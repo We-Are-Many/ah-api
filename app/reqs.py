@@ -46,6 +46,10 @@ def create_user():
         data = cursor.fetchall()
         cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
         cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
+        cursor.execute("INSERT INTO online_users VALUES (%s, %s)", (user_name, 1))
+        cursor.execute("INSERT INTO acc_intents VALUES (%s, %s, %s, %s, %s, %s, %s)", (user_name, 0.0, 0.0, 0.0, 0.0, 0.0, 0))
+        cursor.execute("INSERT INTO user_prefs VALUES (%s, %s, %s, %s)", (user_name, NULL, NULL, NULL))
+        cursor.execute("INSERT INTO bio_keywords VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)", (user_name, 0, 0, 0, 0, 0, 0, 0, 0))
         conn.commit()
         cursor.close()
         conn.close()
@@ -109,8 +113,24 @@ def no_intent():
     message = random.choice(noIntent)
     return message
 
-@app.route("/switch_status", methods=['POST'])
-def switch_status():
+@app.route("/switch_status_on", methods=['POST'])
+def switch_status_on():
+    user_name = request.form.get('user_name', '')
+    conn = mysql.connect()
+    try:
+        cursor = conn.cursor()
+        cursor.execute("UPDATE online_users SET is_online=1 where user_name=%s", (user_name))
+        conn.commit()
+        cursor.close()
+        conn.close()
+        return dataFormatter(200, "Success", [])
+    except:
+        cursor.close()
+        conn.close()
+        return dataFormatter(500, "Database Disconnect", [])
+
+@app.route("/switch_status_off", methods=['POST'])
+def switch_status_off():
     user_name = request.form.get('user_name', '')
     conn = mysql.connect()
     try:
@@ -207,4 +227,3 @@ def process_query(query, user_name):
     except:
         cursor.close()
         conn.close()
-    

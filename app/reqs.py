@@ -173,7 +173,7 @@ def online_user():
         return dataFormatter(500, "Database Disconnect", [])
 
 @app.route('/prefer', methods=['GET'])
-def recommend:
+def recommend():
     pass
 
 def process_query(query, user_name):

@@ -11,7 +11,6 @@ import urllib2
 
 mysql = MySQL()
 
-mysql = MySQL()
 app.config['MYSQL_DATABASE_USER'] = 'root'
 app.config['MYSQL_DATABASE_PASSWORD'] = 'legion5'
 app.config['MYSQL_DATABASE_DB'] = 'ahack'

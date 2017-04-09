@@ -35,9 +35,12 @@ def create_user():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
-		cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
-		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
-		conn.commit()
+		cursor.execute("SELECT count(*) from user_details where user_name=%s", (user_name))
+		data = cursor.fetchAll()
+		if len(data[0])==0:
+			cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
+			cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
+			conn.commit()
 		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])
@@ -82,8 +85,19 @@ def save_rating():
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
+		user_name = request.form.get('user_name', '')
+		cursor.execute("SELECT rating, rating_count from acc_intents where user_name=%s", (user_name))
+		data = cursor.fetchAll()
+		rating = data[0][0]
+		counter = data[0][1]
+		new_rating = request.form.get('rate', '')
+		scaled_new_rating = (rating*counter + new_rating)/(counter + 1)
+		new_counter = counter + 1
+		cursor.execute("update acc_intents set rating=%d where user_name=%s", (scaled_new_rating, user_name))
+		cursor.execute("update acc_intents set rating_count=%d where user_name=%s", (new_rating, user_name))
 		cursor.close()
 		conn.close()
+		return dataFormatter(200, "Success", [])
 	except:
 		cursor.close()
 		conn.close()

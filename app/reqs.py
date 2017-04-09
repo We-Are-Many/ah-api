@@ -109,22 +109,6 @@ def no_intent():
     message = random.choice(noIntent)
     return message
 
-@app.route("/switch_status", methods=['POST'])
-def switch_status():
-    user_name = request.form.get('user_name', '')
-    conn = mysql.connect()
-    try:
-        cursor = conn.cursor()
-        cursor.execute("UPDATE online_users SET is_online=0 where user_name=%s", (user_name))
-        conn.commit()
-        cursor.close()
-        conn.close()
-        return dataFormatter(200, "Success", [])
-    except:
-        cursor.close()
-        conn.close()
-        return dataFormatter(500, "Database Disconnect", [])
-
 @app.route("/online_user", methods=['GET'])
 def online_user():
     conn = mysql.connect()

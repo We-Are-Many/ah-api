@@ -45,10 +45,9 @@ def create_user():
 		cursor.execute("SELECT count(*) from user_details where user_name=%s", (user_name))
 		data = cursor.fetchall()
 		print data[0]
-		if len(data[0])==0:
-			cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
-			cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
-			conn.commit()
+		cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
+		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
+		conn.commit()
 		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])

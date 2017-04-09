@@ -44,7 +44,6 @@ def create_user():
 		cursor = conn.cursor()
 		cursor.execute("SELECT count(*) from user_details where user_name=%s", (user_name))
 		data = cursor.fetchall()
-		print data[0]
 		cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
 		cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
 		conn.commit()
@@ -64,6 +63,7 @@ def save_message():
 		from_user = request.form.get('from_user', '')
 		to_user = request.form.get('to_user', '')
 		message = request.form.get('message', '')
+		process_query(message, from_user)
 		cursor.execute("INSERT INTO messages VALUES (%s, %s, %s)", (to_user, from_user, message))
 		conn.commit()
 		cursor.close()
@@ -74,19 +74,6 @@ def save_message():
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
-@app.route('/fetchmessage', methods=['GET'])
-def get_message():
-	conn = mysql.connect()
-	try:
-		cursor = conn.cursor()
-		cursor.close()
-		conn.close()
-	except:
-		cursor.close()
-		conn.close()
-		return dataFormatter(500, "Database Disconnect", [])
-
-# save average of rating
 @app.route('/saveuserrating', methods=['POST'])
 def save_rating():
 	conn = mysql.connect()
@@ -102,6 +89,7 @@ def save_rating():
 		new_counter = counter + 1
 		cursor.execute("update acc_intents set rating=%d where user_name=%s", (scaled_new_rating, user_name))
 		cursor.execute("update acc_intents set rating_count=%d where user_name=%s", (new_rating, user_name))
+		conn.commit()
 		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])
@@ -123,10 +111,12 @@ def no_intent():
 
 @app.route("/switch_status", methods=['POST'])
 def switch_status():
+	user_name = request.form.get('user_name', '')
 	conn = mysql.connect()
 	try:
 		cursor = conn.cursor()
 		cursor.execute("UPDATE online_users SET is_online=0 where user_name=%s", (user_name))
+		conn.commit()
 		cursor.close()
 		conn.close()
 		return dataFormatter(200, "Success", [])
@@ -155,35 +145,66 @@ def online_user():
 		conn.close()
 		return dataFormatter(500, "Database Disconnect", [])
 
-def process_query(query):
-    msg = ""
+def process_query(query, user_name):
     try:
         response = requests.get(url='https://api.wit.ai/message?v=20170409&q='+query,headers={'Authorization': 'Bearer VT4JUXRFXXQTIQ53V3IE3IZPLSY34Z5H'})
     except:
-        msg = "Looks like we are facing technical difficulties. Please try again later."
-        return msg
+        return {'alcohol' : 0.0, 'positive' : 0.0, 'negative' : 0.0, 'extra' : 0.0}
     dict_response = json.loads(response.text)
 
     intent = None
     confidence = None
     entities = None
     msg = None
+    response = {'alcohol' : 0.0, 'positive' : 0.0, 'negative' : 0.0, 'extra' : 0.0}
 
     if dict_response['entities']['intent']:
-        intent = dict_response['entities']['intent'][0]['value']
-        confidence = dict_response['entities']['intent'][0]['confidence']
-        entities = dict_response['entities']
+    	entities = dict_response['entities']
+    	try:
+        	intent = dict_response['entities']['intent'][0]['value']
+        	confidence = dict_response['entities']['intent'][0]['confidence']
+        	response[intent] += confidence
+        except:
+        	pass
+        try:
+        	intent = dict_response['entities']['intent'][1]['value']
+        	confidence = dict_response['entities']['intent'][1]['confidence']
+        	response[intent] += confidence
+        except:
+        	pass
+        try:
+        	intent = dict_response['entities']['intent'][2]['value']
+        	confidence = dict_response['entities']['intent'][2]['confidence']
+        	response[intent] += confidence
+        except:
+        	pass
+        try:
+        	intent = dict_response['entities']['intent'][3]['value']
+        	confidence = dict_response['entities']['intent'][3]['confidence']
+        	response[intent] += confidence
+        except:
+        	pass
 
-    if intent is None or confidence < 0.2:
-        msg = no_intent()
-    elif intent == "alcohol":
-    	msg = "alcohol"
-    elif intent == "negative":
-    	msg = "negative"
-    elif intent == "positive":
-    	msg = "positive"
-    elif intent == "extra":
-    	msg = "extra"
-    else:
-    	msg = "empty"
-    return msg
+    if dict_response['entities']['intent'][0]['value'] is None or dict_response['entities']['intent'][0]['confidence'] < 0.2:
+        response = {'alcohol' : 0.0, 'positive' : 0.0, 'negative' : 0.0, 'extra' : 0.0}
+    conn = mysql.connect()
+	try:
+		cursor = conn.cursor()
+		cursor.execute("SELECT alcohol, positive, negative, extra from acc_intents where user_name=%s", (user_name))
+		data = cursor.fetchall()
+		alcohol = data[0][0]
+		positive = data[0][1]
+		negative = data[0][2]
+		extra = data[0][3]
+		new_alcohol = alcohol + response['alcohol']
+		new_positive = positive + response['positive']
+		new_negative = negative + response['negative']
+		new_extra = extra + response['extra']
+		cursor.execute("update acc_intents set alcohol=%d, positive=%d, negative=%d, extra=%d where user_name=%s", (new_alcohol, new_positive, new_negative, new_extra, user_name))
+		conn.commit()
+		cursor.close()
+		conn.close()
+	except:
+		cursor.close('UPDATE ')
+		conn.close()
+    

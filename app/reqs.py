@@ -205,6 +205,6 @@ def process_query(query, user_name):
 		cursor.close()
 		conn.close()
 	except:
-		cursor.close('UPDATE ')
+		cursor.close()
 		conn.close()
     

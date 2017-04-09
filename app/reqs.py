@@ -42,7 +42,7 @@ def create_user():
 	try:
 		cursor = conn.cursor()
 		cursor.execute("SELECT count(*) from user_details where user_name=%s", (user_name))
-		data = cursor.fetchAll()
+		data = cursor.fetchall()
 		if len(data[0])==0:
 			cursor.execute("INSERT INTO user_details VALUES (%s, %s, %s, %s, %s)", (user_name, name, email, location, talk_points))
 			cursor.execute("INSERT INTO user_problems VALUES (%s, %s)", (user_name, problem))
@@ -93,7 +93,7 @@ def save_rating():
 		cursor = conn.cursor()
 		user_name = request.form.get('user_name', '')
 		cursor.execute("SELECT rating, rating_count from acc_intents where user_name=%s", (user_name))
-		data = cursor.fetchAll()
+		data = cursor.fetchall()
 		rating = data[0][0]
 		counter = data[0][1]
 		new_rating = request.form.get('rate', '')

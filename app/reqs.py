@@ -113,6 +113,7 @@ def no_intent():
     message = random.choice(noIntent)
     return message
 
+<<<<<<< HEAD
 @app.route("/switch_status", methods=['POST'])
 def switch_status_on():
     user_name = request.form.get('user_name', '')
@@ -152,6 +153,8 @@ def switch_status_off():
         conn.close()
         return dataFormatter(500, "Database Disconnect", [])
 """
+=======
+>>>>>>> 2ff2dd2edaabfaab5bd61a68ee1b86fa90d9b6d3
 @app.route("/online_user", methods=['GET'])
 def online_user():
     conn = mysql.connect()
